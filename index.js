@@ -1,4 +1,4 @@
-import connectDB from "./database/connection.js";
+import connectDB from "./database/mongo_connection.js"
 import {app} from "./app.js";
 import dotenv from "dotenv";
 

@@ -2,9 +2,10 @@ import mongoose, { Schema } from "mongoose"
 
 const senderSchema = new mongoose.Schema(
     {
-        user_id: {
+        userId: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
         email: {
             type: String,

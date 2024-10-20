@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const clientSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
     {
         username: {
             type:      String,
@@ -29,22 +29,25 @@ const clientSchema = new mongoose.Schema(
         apiKey: {
             type: String,
             required: [true, "Api Key is Required"]
+        },
+        refreshToken: {
+            type:      String
         }
     }
 )
 
-clientSchema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
     if(this.isModified("password")){
         this.password = await bcrypt.hash(this.password, 10)
     }
     next()
 })
 
-clientSchema.methods.isPasswordCorrect = async function (password) {
+userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password)
 }
 
-clientSchema.methods.generateRefreshToken = function() {
+userSchema.methods.generateRefreshToken = function() {
     return jwt.sign(
         {
             _id: this.id,
@@ -59,7 +62,7 @@ clientSchema.methods.generateRefreshToken = function() {
     )
 }
 
-clientSchema.methods.generateAccessToken = function() {
+userSchema.methods.generateAccessToken = function() {
     return jwt.sign(
         {
             _id: this.id,
@@ -74,4 +77,4 @@ clientSchema.methods.generateAccessToken = function() {
     )
 }
 
-export const Client = new mongoose.model("Client", clientSchema)
+export const User = new mongoose.model("User", userSchema)
